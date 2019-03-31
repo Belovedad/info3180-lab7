@@ -6,7 +6,7 @@ This file creates your application.
 """
 
 from app import app
-from flask import render_template, request
+from flask import render_template, request, jsonify
 from forms import UploadForm
 import os
 from werkzeug.utils import secure_filename
@@ -30,8 +30,18 @@ def index(path):
     Also we will render the initial webpage and then let VueJS take control.
     """
     return render_template('index.html')
-    
 
+app.route("/api/upload", methods=["POST"])
+def uploads():
+    form = UploadForm()
+    filefolder = app.config['UPLOAD_FOLDER']
+    if form.validate_on_submit():
+        description = form.description.data
+        file = request.files['photo']
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(filefolder, filename))
+        return jsonify(message="File Upload Successful", filename=filename, description=description)
+    return jsonify(errors=form_errors(form))
 
 
 # Here we define a function to collect form errors from Flask-WTF
