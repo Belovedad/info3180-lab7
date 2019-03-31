@@ -6,4 +6,4 @@ from app import app
 
 class UploadForm(FlaskForm):
     description = TextAreaField("Description", validators=[DataRequired()])
-    photo = FileField("Photo", validators=[FileRequired(), FileAllowed(app.config['ALLOWED_IMAGES'], "Images Only!")])
+    photo = FileField("Photo", validators=[FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], "Images Only!")])
