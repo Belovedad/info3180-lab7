@@ -31,13 +31,13 @@ def index(path):
     """
     return render_template('index.html')
 
-app.route("/api/upload", methods=["POST"])
-def uploads():
+@app.route("/api/upload", methods=["POST"])
+def upload():
     form = UploadForm()
     filefolder = app.config['UPLOAD_FOLDER']
     if form.validate_on_submit():
         description = form.description.data
-        file = request.files['photo']
+        file = request.files['fileupload']
         filename = secure_filename(file.filename)
         file.save(os.path.join(filefolder, filename))
         return jsonify(message="File Upload Successful", filename=filename, description=description)
